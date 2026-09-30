@@ -1,0 +1,70 @@
+---
+import Base from '../../layouts/Base.astro';
+import { useTranslations } from '../../i18n';
+import { localePath, type Lang } from '../../i18n/config';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const s = t.services;
+const link = (path: string) => localePath(lang, path);
+
+const faqLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: s.faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+};
+---
+
+<Base lang={lang} title={t.meta.services.title} description={t.meta.services.description}>
+  <section class="section page-top">
+    <div class="wrap">
+      <header class="head">
+        <p class="eyebrow">{s.eyebrow}</p>
+        <h1 class="h2">{s.title}</h1>
+        <p class="lede">{s.lede}</p>
+      </header>
+      <ol class="steps steps-long">
+        {s.steps.map((step, i) => (
+          <li data-reveal>
+            <span class="n">{String(i + 1).padStart(2, '0')}</span>
+            <h3>{step.title}</h3>
+            <p>{step.text}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="section tone">
+    <div class="wrap split">
+      <div data-reveal>
+        <h2>{s.documentsTitle}</h2>
+        <ul class="checks plain">
+          {s.documents.map((d) => <li><span>{d}</span></li>)}
+        </ul>
+        <p class="more"><a class="btn" href={link('/contact')}>{s.startQuote}</a></p>
+      </div>
+      <figure class="figure photo" data-reveal>
+        <img src="/img/inspection.jpg" alt="" width="1672" height="940" loading="lazy" />
+      </figure>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap narrow">
+      <header class="head">
+        <p class="eyebrow">{s.faqEyebrow}</p>
+        <h2>{s.faqTitle}</h2>
+      </header>
+      <div class="faq">
+        {s.faqs.map((f) => <details><summary>{f.q}</summary><p>{f.a}</p></details>)}
+      </div>
+      <p class="more"><a class="btn ghost" href={link('/contact')}>{s.faqCta}</a></p>
+    </div>
+  </section>
+
+  <script type="application/ld+json" set:html={JSON.stringify(faqLd)} />
+</Base>

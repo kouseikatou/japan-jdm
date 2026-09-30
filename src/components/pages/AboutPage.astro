@@ -1,0 +1,61 @@
+---
+import Base from '../../layouts/Base.astro';
+import { useTranslations } from '../../i18n';
+import { localePath, type Lang } from '../../i18n/config';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const a = t.about;
+
+const orgLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: t.meta.siteName,
+  url: 'https://japan-jdm.com',
+  email: t.company.email,
+  telephone: t.company.phone,
+  address: { '@type': 'PostalAddress', addressLocality: 'Nagoya', addressRegion: 'Aichi', addressCountry: 'JP' },
+};
+---
+
+<Base lang={lang} title={t.meta.about.title} description={t.meta.about.description}>
+  <section class="section page-top">
+    <div class="wrap split">
+      <div>
+        <header class="head">
+          <p class="eyebrow">{a.eyebrow}</p>
+          <h1 class="h2">{a.title[0]}<br />{a.title[1]}</h1>
+        </header>
+        <div class="prose">
+          {a.paragraphs.map((p) => <p>{p}</p>)}
+        </div>
+      </div>
+      <figure class="figure photo" data-reveal>
+        <img src="/img/hero-nagoya-night.jpg" alt="" width="1672" height="940" loading="lazy" />
+      </figure>
+    </div>
+  </section>
+
+  <section class="section tone">
+    <div class="wrap split">
+      <div data-reveal>
+        <h2>{a.companyTitle}</h2>
+        <dl class="table">
+          {a.rows.map((r) => <div><dt>{r.label}</dt><dd>{r.value}</dd></div>)}
+        </dl>
+      </div>
+      <div data-reveal style="--d:1">
+        <h2>{a.principlesTitle}</h2>
+        <ul class="checks">
+          {a.principles.map((p) => <li><strong>{p.title}</strong><span>{p.text}</span></li>)}
+        </ul>
+        <p class="more"><a class="btn" href={localePath(lang, '/contact')}>{a.cta}</a></p>
+      </div>
+    </div>
+  </section>
+
+  <script type="application/ld+json" set:html={JSON.stringify(orgLd)} />
+</Base>

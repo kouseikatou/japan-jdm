@@ -1,0 +1,47 @@
+---
+import Base from '../../layouts/Base.astro';
+import { useTranslations } from '../../i18n';
+import { localePath, type Lang } from '../../i18n/config';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const s = t.shipping;
+---
+
+<Base lang={lang} title={t.meta.shipping.title} description={t.meta.shipping.description}>
+  <section class="section page-top">
+    <div class="wrap">
+      <header class="head">
+        <p class="eyebrow">{s.eyebrow}</p>
+        <h1 class="h2">{s.title}</h1>
+        <p class="lede">{s.lede}</p>
+      </header>
+      <div class="terms-list">
+        {s.sections.map((sec, i) => (
+          <article data-reveal>
+            <span class="n">{String(i + 1).padStart(2, '0')}</span>
+            <div><h3>{sec.title}</h3><p>{sec.text}</p></div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section tone">
+    <div class="wrap split">
+      <div data-reveal>
+        <h2>{s.safetyTitle}</h2>
+        <ul class="checks plain">
+          {s.safety.map((line) => <li><span>{line}</span></li>)}
+        </ul>
+        <p class="more"><a class="btn" href={localePath(lang, '/contact')}>{s.cta}</a></p>
+      </div>
+      <figure class="figure blueprint" data-reveal>
+        <img src="/img/blueprint-port.png" alt="" width="1600" height="900" loading="lazy" />
+      </figure>
+    </div>
+  </section>
+</Base>

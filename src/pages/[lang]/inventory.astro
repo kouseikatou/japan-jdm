@@ -1,0 +1,12 @@
+---
+import InventoryPage from '../../components/pages/InventoryPage.astro';
+import { nonDefaultLangs } from '../../i18n/config';
+
+export function getStaticPaths() {
+  return nonDefaultLangs.map((lang) => ({ params: { lang }, props: { lang } }));
+}
+
+const { lang } = Astro.props;
+---
+
+<InventoryPage lang={lang} />

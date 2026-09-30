@@ -1,0 +1,26 @@
+{
+  "name": "japan-jdm",
+  "main": "src/worker.js",
+  "compatibility_date": "2026-09-01",
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "404-page"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "japan-jdm-inquiries",
+      "database_id": "01be46f6-4bd4-4938-a1c2-c4bae975c041"
+    }
+  ],
+  "send_email": [
+    { "name": "NOTIFY", "destination_address": "kouse1113sp@gmail.com" }
+  ],
+  "vars": { "NOTIFY_TO": "kouse1113sp@gmail.com" },
+  "routes": [
+    { "pattern": "japan-jdm.com", "custom_domain": true },
+    { "pattern": "www.japan-jdm.com", "custom_domain": true }
+  ]
+}

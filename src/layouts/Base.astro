@@ -1,0 +1,134 @@
+---
+import '../styles/global.css';
+import { ClientRouter } from 'astro:transitions';
+import { languages, langCodes, defaultLang, localePath, stripLang, type Lang } from '../i18n/config';
+import { useTranslations } from '../i18n';
+
+interface Props {
+  title: string;
+  description?: string;
+  lang?: Lang;
+}
+
+const { lang = defaultLang, title, description } = Astro.props;
+const t = useTranslations(lang);
+const metaDescription = description ?? t.meta.defaultDescription;
+
+const site = Astro.site ?? new URL('https://japan-jdm.com');
+const barePath = stripLang(Astro.url.pathname.replace(/(.)\/$/, '$1'));
+const canonical = new URL(localePath(lang, barePath), site);
+const ogImage = new URL('/img/hero-nagoya-night.jpg', site);
+
+const nav = [
+  { path: '/inventory', label: t.nav.stock },
+  { path: '/services', label: t.nav.howToBuy },
+  { path: '/shipping', label: t.nav.shipping },
+  { path: '/about', label: t.nav.about },
+];
+
+// Display serif for headings, sans for body. CJK languages load matching Noto families.
+const cjk: Partial<Record<Lang, { serif: string; sans: string }>> = {
+  ja: { serif: 'Noto+Serif+JP:wght@500;600', sans: 'Noto+Sans+JP:wght@400;500;700' },
+  zh: { serif: 'Noto+Serif+SC:wght@500;600', sans: 'Noto+Sans+SC:wght@400;500;700' },
+  ko: { serif: 'Noto+Serif+KR:wght@500;600', sans: 'Noto+Sans+KR:wght@400;500;700' },
+};
+const extra = cjk[lang] ? `&family=${cjk[lang]!.serif}&family=${cjk[lang]!.sans}` : '';
+const fontHref = `https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,600&family=Inter:wght@400;500;600${extra}&display=swap`;
+---
+
+<!doctype html>
+<html lang={languages[lang].htmlLang} data-lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={metaDescription} />
+    <meta name="theme-color" content="#0f1012" />
+    <script is:inline>document.documentElement.classList.add('js');</script>
+    <ClientRouter />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="canonical" href={canonical} />
+    {langCodes.map((code) => (
+      <link rel="alternate" hreflang={languages[code].htmlLang} href={new URL(localePath(code, barePath), site)} />
+    ))}
+    <link rel="alternate" hreflang="x-default" href={new URL(localePath(defaultLang, barePath), site)} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={t.meta.siteName} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={metaDescription} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:locale" content={languages[lang].ogLocale} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href={fontHref} rel="stylesheet" />
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <header class="site-header">
+      <div class="wrap">
+        <a class="brand" href={localePath(lang, '/')} aria-label={t.meta.siteName}>JAPAN&nbsp;JDM</a>
+        <nav aria-label={t.nav.label}>
+          <ul class="nav-links">
+            {nav.map((n) => (
+              <li><a href={localePath(lang, n.path)} aria-current={barePath === n.path ? 'page' : undefined}>{n.label}</a></li>
+            ))}
+          </ul>
+          <div class="nav-tools">
+            <a class="nav-cta" href={localePath(lang, '/contact')}>{t.nav.quote}</a>
+            <div class="lang-switch">
+              <details>
+                <summary aria-label={t.nav.language}>{languages[lang].short}</summary>
+                <ul>
+                  {langCodes.map((code) => (
+                    <li>
+                      <a href={localePath(code, barePath)} hreflang={languages[code].htmlLang} lang={languages[code].htmlLang} aria-current={code === lang ? 'true' : undefined}>
+                        {languages[code].label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </details>
+            </div>
+          </div>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main"><slot /></main>
+
+    {barePath !== '/contact' && <a class="sticky-cta" href={localePath(lang, '/contact')}>{t.nav.quote}</a>}
+
+    <footer class="site-footer">
+      <div class="wrap footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href={localePath(lang, '/')}>JAPAN&nbsp;JDM</a>
+          <p>{t.company.address}</p>
+        </div>
+        <div>
+          <h2 class="footer-h">{t.footer.explore}</h2>
+          <ul class="footer-links">
+            {nav.map((n) => <li><a href={localePath(lang, n.path)}>{n.label}</a></li>)}
+            <li><a href={localePath(lang, '/contact')}>{t.nav.quote}</a></li>
+          </ul>
+        </div>
+        <div>
+          <h2 class="footer-h">{t.footer.contact}</h2>
+          <ul class="footer-links">
+            <li><a href={`tel:${t.company.phone.replace(/-/g, '')}`}>{t.footer.phoneLabel} {t.company.phone}</a></li>
+            <li><a href={`mailto:${t.company.email}`}>{t.company.email}</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="wrap footer-base">
+        <p>{t.footer.note}</p>
+        <p>&copy; {new Date().getFullYear()} {t.meta.siteName}</p>
+      </div>
+    </footer>
+  </body>
+  <script>
+    import '../scripts/fx.js';
+  </script>
+</html>
