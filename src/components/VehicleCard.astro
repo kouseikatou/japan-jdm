@@ -1,6 +1,7 @@
 ---
 import { localePath, type Lang } from '../i18n/config';
 import { useTranslations } from '../i18n';
+import { extra } from '../i18n/extra';
 import type { Vehicle } from '../data/vehicles';
 
 interface Props {
@@ -9,26 +10,27 @@ interface Props {
 }
 const { lang, car } = Astro.props;
 const t = useTranslations(lang);
+const x = extra[lang];
 const inv = t.inventory;
 const label = `${car.name} (${car.chassis})`;
 const href = `${localePath(lang, '/contact')}?car=${encodeURIComponent(label)}`;
 ---
 
 <article class="vehicle" data-reveal>
-  <div class="vehicle-photo"><span>{inv.photoSoon}</span></div>
+  <div class="vehicle-photo">
+    <img src={car.image} alt={label} width="1600" height="1000" loading="lazy" />
+    <span class="img-note">{x.illustrative}</span>
+  </div>
   <div class="vehicle-body">
-    <p class="badge">{inv.sample}</p>
     <h3>{car.name}</h3>
     <p class="chassis">{car.chassis}</p>
     <dl class="specs">
-      <div><dt>{inv.fields.year}</dt><dd>{car.year}</dd></div>
-      <div><dt>{inv.fields.mileage}</dt><dd>{car.km} km</dd></div>
+      <div><dt>{x.years}</dt><dd>{car.years}</dd></div>
       <div><dt>{inv.fields.trans}</dt><dd>{car.trans}</dd></div>
       <div><dt>{inv.fields.drive}</dt><dd>{car.drive}</dd></div>
       <div><dt>{inv.fields.steering}</dt><dd>{inv.steeringRight}</dd></div>
-      <div><dt>{inv.fields.location}</dt><dd>Nagoya</dd></div>
     </dl>
-    <p class="price"><strong>{inv.price}</strong><span>{inv.priceNote}</span></p>
+    <p class="price"><strong>{x.status}</strong><span>{inv.priceNote}</span></p>
     <a class="btn small" href={href}>{inv.request}</a>
   </div>
 </article>

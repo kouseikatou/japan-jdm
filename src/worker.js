@@ -87,6 +87,68 @@ async function notify(env, data) {
   await env.NOTIFY.send(new EmailMessage(from, env.NOTIFY_TO, msg.asRaw()));
 }
 
+// ---------- language by visitor location ----------
+const LANGS = ['pt', 'zh', 'ko', 'ja'];
+const COUNTRY_LANG = {
+  BR: 'pt', PT: 'pt', AO: 'pt', MZ: 'pt',
+  CN: 'zh', TW: 'zh', HK: 'zh', MO: 'zh', SG: 'zh',
+  KR: 'ko',
+  JP: 'ja',
+};
+const BOT_RE = /bot|crawl|spider|slurp|facebookexternalhit|embedly|preview|lighthouse|headless/i;
+const ONE_YEAR = 60 * 60 * 24 * 365;
+
+const pathLang = (path) => path.match(/^\/(pt|zh|ko|ja)(\/|$)/)?.[1] ?? null;
+const isPage = (path) => !path.startsWith('/_astro/') && !/\.[a-z0-9]+$/i.test(path);
+
+function readLangCookie(request) {
+  const match = (request.headers.get('cookie') ?? '').match(/(?:^|;\s*)lang=([a-z]{2})/);
+  return match?.[1] ?? null;
+}
+
+const langCookie = (lang) => `lang=${lang}; Path=/; Max-Age=${ONE_YEAR}; SameSite=Lax; Secure`;
+
+function redirect(url, cookie) {
+  const headers = { Location: url, 'Cache-Control': 'no-store', Vary: 'Cookie' };
+  if (cookie) headers['Set-Cookie'] = cookie;
+  return new Response(null, { status: 302, headers });
+}
+
+const localized = (lang, url) => `/${lang}${url.pathname === '/' ? '' : url.pathname}${url.search}`;
+
+async function withCookie(response, cookie) {
+  const res = new Response(response.body, response);
+  res.headers.append('Set-Cookie', cookie);
+  return res;
+}
+
+async function handlePage(request, env, url) {
+  // Explicit choice from the language menu: remember it.
+  const hl = url.searchParams.get('hl');
+  if (hl === 'en' || LANGS.includes(hl)) {
+    url.searchParams.delete('hl');
+    const target = hl === 'en' ? `${url.pathname}${url.search}` : localized(hl, url);
+    return redirect(target, langCookie(hl));
+  }
+
+  const current = pathLang(url.pathname);
+  if (current) {
+    // Visiting a language URL counts as choosing that language.
+    const res = await env.ASSETS.fetch(request);
+    return readLangCookie(request) === current ? res : withCookie(res, langCookie(current));
+  }
+
+  // English (unprefixed) URL: send first-time visitors to their local language.
+  const saved = readLangCookie(request);
+  if (saved === 'en') return env.ASSETS.fetch(request);
+  if (LANGS.includes(saved)) return redirect(localized(saved, url));
+  if (!BOT_RE.test(request.headers.get('user-agent') ?? '')) {
+    const geo = COUNTRY_LANG[request.cf?.country];
+    if (geo) return redirect(localized(geo, url));
+  }
+  return env.ASSETS.fetch(request);
+}
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
@@ -101,6 +163,7 @@ export default {
       }
     }
 
+    if (request.method === 'GET' && isPage(url.pathname)) return handlePage(request, env, url);
     return env.ASSETS.fetch(request);
   },
 };

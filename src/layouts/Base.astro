@@ -84,7 +84,7 @@ const fontHref = `https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@
                 <ul>
                   {langCodes.map((code) => (
                     <li>
-                      <a href={localePath(code, barePath)} hreflang={languages[code].htmlLang} lang={languages[code].htmlLang} aria-current={code === lang ? 'true' : undefined}>
+                      <a href={`${localePath(code, barePath)}?hl=${code}`} hreflang={languages[code].htmlLang} lang={languages[code].htmlLang} aria-current={code === lang ? 'true' : undefined}>
                         {languages[code].label}
                       </a>
                     </li>

@@ -3,6 +3,7 @@ import Base from '../../layouts/Base.astro';
 import VehicleCard from '../VehicleCard.astro';
 import { vehicles } from '../../data/vehicles';
 import { useTranslations } from '../../i18n';
+import { extra } from '../../i18n/extra';
 import { localePath, type Lang } from '../../i18n/config';
 
 interface Props {
@@ -11,6 +12,7 @@ interface Props {
 const { lang } = Astro.props;
 const t = useTranslations(lang);
 const inv = t.inventory;
+const x = extra[lang];
 ---
 
 <Base lang={lang} title={t.meta.inventory.title} description={t.meta.inventory.description}>
@@ -18,13 +20,13 @@ const inv = t.inventory;
     <div class="wrap">
       <header class="head">
         <p class="eyebrow">{inv.eyebrow}</p>
-        <h1 class="h2">{inv.title}</h1>
-        <p class="lede">{inv.lede}</p>
+        <h1 class="h2">{x.stockTitle}</h1>
+        <p class="lede">{x.stockLede}</p>
       </header>
       <div class="vehicle-grid">
         {vehicles.map((car) => <VehicleCard lang={lang} car={car} />)}
       </div>
-      <p class="note">{inv.note}</p>
+      <p class="note">{x.stockNote}</p>
       <p class="more"><a class="btn" href={localePath(lang, '/contact')}>{inv.cta}</a></p>
     </div>
   </section>

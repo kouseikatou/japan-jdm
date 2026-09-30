@@ -3,6 +3,7 @@ import Base from '../../layouts/Base.astro';
 import VehicleCard from '../VehicleCard.astro';
 import { vehicles } from '../../data/vehicles';
 import { useTranslations } from '../../i18n';
+import { extra } from '../../i18n/extra';
 import { localePath, type Lang } from '../../i18n/config';
 
 interface Props {
@@ -11,6 +12,8 @@ interface Props {
 const { lang } = Astro.props;
 const t = useTranslations(lang);
 const home = t.home;
+const x = extra[lang];
+const companyRows = [home.company.rows[0], { label: x.representative, value: x.representativeName }, ...home.company.rows.slice(1)];
 const link = (path: string) => localePath(lang, path);
 const request = (value: string) => `${link('/contact')}?car=${encodeURIComponent(value)}`;
 
@@ -68,8 +71,8 @@ const faqLd = {
     <div class="wrap">
       <header class="head" data-reveal>
         <p class="eyebrow">{home.featured.eyebrow}</p>
-        <h2>{home.featured.title}</h2>
-        <p class="lede">{home.featured.lede}</p>
+        <h2>{x.stockTitle}</h2>
+        <p class="lede">{x.stockLede}</p>
       </header>
       <div class="vehicle-grid">
         {vehicles.slice(0, 3).map((car) => <VehicleCard lang={lang} car={car} />)}
@@ -166,7 +169,7 @@ const faqLd = {
         <p class="eyebrow">{home.company.eyebrow}</p>
         <h2>{home.company.title}</h2>
         <dl class="table">
-          {home.company.rows.map((r) => (
+          {companyRows.map((r) => (
             <div><dt>{r.label}</dt><dd>{r.value}</dd></div>
           ))}
         </dl>
