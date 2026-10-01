@@ -95,7 +95,6 @@ const COUNTRY_LANG = {
   KR: 'ko',
   JP: 'ja',
 };
-const BOT_RE = /bot|crawl|spider|slurp|facebookexternalhit|embedly|preview|lighthouse|headless/i;
 const ONE_YEAR = 60 * 60 * 24 * 365;
 
 const pathLang = (path) => path.match(/^\/(pt|zh|ko|ja)(\/|$)/)?.[1] ?? null;
@@ -142,10 +141,9 @@ async function handlePage(request, env, url) {
   const saved = readLangCookie(request);
   if (saved === 'en') return env.ASSETS.fetch(request);
   if (LANGS.includes(saved)) return redirect(localized(saved, url));
-  if (!BOT_RE.test(request.headers.get('user-agent') ?? '')) {
-    const geo = COUNTRY_LANG[request.cf?.country];
-    if (geo) return redirect(localized(geo, url));
-  }
+  // Same rule for every visitor, crawlers included (no user-agent special-casing).
+  const geo = COUNTRY_LANG[request.cf?.country];
+  if (geo) return redirect(localized(geo, url));
   return env.ASSETS.fetch(request);
 }
 
