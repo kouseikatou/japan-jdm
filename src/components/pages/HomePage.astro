@@ -27,37 +27,43 @@ const faqLd = {
 
 <Base lang={lang} title={t.meta.home.title} description={t.meta.home.description}>
   <section class="hero">
-    <img class="hero-image" src="/img/hero-nagoya-night.jpg" alt="" width="1672" height="940" fetchpriority="high" />
-    <video class="hero-image hero-video" autoplay muted loop playsinline preload="auto" poster="/img/hero-nagoya-night.jpg" aria-hidden="true" tabindex="-1">
-      <source src="/img/hero-loop.mp4" type="video/mp4" />
-    </video>
-    <div class="hero-shade" aria-hidden="true"></div>
-    <div class="wrap hero-inner">
-      <p class="eyebrow rise" style="--i:0">{home.eyebrow}</p>
-      <h1>
-        {home.headline.map((line, i) => (
-          <span class="line"><span class="rise" style={`--i:${i + 1}`}>{line}</span></span>
-        ))}
-      </h1>
-      <p class="lede rise" style="--i:4">{home.lede}</p>
+    <div class="wrap hero-split">
+      <div class="hero-copy">
+        <p class="eyebrow rise" style="--i:0">{home.eyebrow}</p>
+        <h1>
+          {home.headline.map((line, i) => (
+            <span class="line"><span class="rise" style={`--i:${i + 1}`}>{line}</span></span>
+          ))}
+        </h1>
+        <p class="lede rise" style="--i:4">{home.lede}</p>
 
-      <form class="search rise" style="--i:5" action={link('/contact')} method="get">
-        <p class="search-title">{home.search.label}</p>
-        <div class="search-row">
-          <label>
-            <span>{home.search.make}</span>
-            <input name="car" placeholder={home.search.makePlaceholder} required />
-          </label>
-          <label>
-            <span>{home.search.year}</span>
-            <select name="year">
-              {home.search.yearOptions.map((o) => <option value={o.value}>{o.label}</option>)}
-            </select>
-          </label>
-          <button class="btn" type="submit">{home.search.submit}</button>
-        </div>
-        <a class="text-link" href={link('/inventory')}>{home.browseStock} &rarr;</a>
-      </form>
+        <form class="search rise" style="--i:5" action={link('/contact')} method="get">
+          <p class="search-title">{home.search.label}</p>
+          <div class="search-row">
+            <label>
+              <span>{home.search.make}</span>
+              <input name="car" placeholder={home.search.makePlaceholder} required />
+            </label>
+            <label>
+              <span>{home.search.year}</span>
+              <select name="year">
+                {home.search.yearOptions.map((o) => <option value={o.value}>{o.label}</option>)}
+              </select>
+            </label>
+            <button class="btn" type="submit">{home.search.submit}</button>
+          </div>
+          <a class="text-link" href={link('/inventory')}>{home.browseStock} &rarr;</a>
+        </form>
+      </div>
+
+      <figure class="hero-media rise" style="--i:3" aria-hidden="true">
+        <img src="/img/hero-nagoya-night.jpg" alt="" width="1672" height="940" fetchpriority="high" />
+        <video autoplay muted loop playsinline preload="auto" poster="/img/hero-nagoya-night.jpg" tabindex="-1">
+          <source src="/img/hero-loop.mp4" type="video/mp4" />
+        </video>
+        <span class="tategaki" aria-hidden="true">日本の車を、世界へ</span>
+        <span class="hanko" aria-hidden="true">名古屋</span>
+      </figure>
     </div>
   </section>
 
