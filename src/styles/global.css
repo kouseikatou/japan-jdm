@@ -285,6 +285,7 @@ html[data-lang='pt'] .hero h1 { font-size: clamp(2.2rem, 1rem + 4vw, 4.6rem); }
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .hero-video { display: none; }
   html { scroll-behavior: auto; }
   .js [data-reveal], .rise, .hero h1 .line .rise { opacity: 1 !important; transform: none !important; animation: none !important; transition: none !important; }
   .btn, .vehicle, .tile { transition: none; }

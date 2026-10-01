@@ -28,6 +28,9 @@ const faqLd = {
 <Base lang={lang} title={t.meta.home.title} description={t.meta.home.description}>
   <section class="hero">
     <img class="hero-image" src="/img/hero-nagoya-night.jpg" alt="" width="1672" height="940" fetchpriority="high" />
+    <video class="hero-image hero-video" autoplay muted loop playsinline preload="auto" poster="/img/hero-nagoya-night.jpg" aria-hidden="true" tabindex="-1">
+      <source src="/img/hero-loop.mp4" type="video/mp4" />
+    </video>
     <div class="hero-shade" aria-hidden="true"></div>
     <div class="wrap hero-inner">
       <p class="eyebrow rise" style="--i:0">{home.eyebrow}</p>
