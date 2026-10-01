@@ -66,7 +66,7 @@ const fontHref = `https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@
     <link href={fontHref} rel="stylesheet" />
   </head>
   <body>
-    <a class="skip" href="#main">Skip to content</a>
+    <a class="skip" href="#main">{t.footer.skip}</a>
     <header class="site-header">
       <div class="wrap">
         <a class="brand" href={localePath(lang, '/')} aria-label={t.meta.siteName}>JAPAN&nbsp;JDM</a>
@@ -124,7 +124,7 @@ const fontHref = `https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@
       </div>
       <div class="wrap footer-base">
         <p>{t.footer.note}</p>
-        <p>&copy; {new Date().getFullYear()} {t.meta.siteName}</p>
+        <p><a href={localePath(lang, '/privacy')}>{t.footer.privacy}</a> &middot; &copy; {new Date().getFullYear()} {t.meta.siteName}</p>
       </div>
     </footer>
   </body>

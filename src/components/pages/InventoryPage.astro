@@ -1,7 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
-import VehicleCard from '../VehicleCard.astro';
-import { vehicles } from '../../data/vehicles';
+import ModelCard from '../ModelCard.astro';
+import { models, alsoAvailable } from '../../data/vehicles';
 import { useTranslations } from '../../i18n';
 import { extra } from '../../i18n/extra';
 import { localePath, type Lang } from '../../i18n/config';
@@ -11,7 +11,6 @@ interface Props {
 }
 const { lang } = Astro.props;
 const t = useTranslations(lang);
-const inv = t.inventory;
 const x = extra[lang];
 ---
 
@@ -19,15 +18,52 @@ const x = extra[lang];
   <section class="section page-top">
     <div class="wrap">
       <header class="head">
-        <p class="eyebrow">{inv.eyebrow}</p>
+        <p class="eyebrow">{t.inventory.eyebrow}</p>
         <h1 class="h2">{x.stockTitle}</h1>
         <p class="lede">{x.stockLede}</p>
       </header>
-      <div class="vehicle-grid">
-        {vehicles.map((car) => <VehicleCard lang={lang} car={car} />)}
+
+      <div class="filter" role="group" aria-label={x.filterLabel}>
+        <button type="button" data-filter="all" aria-pressed="true">{x.filterAll}</button>
+        <button type="button" data-filter="turbo" aria-pressed="false">{x.filterTurbo}</button>
+        <button type="button" data-filter="na" aria-pressed="false">{x.filterNa}</button>
       </div>
+
+      <div class="model-grid" id="models">
+        {models.map((m) => <ModelCard lang={lang} model={m} />)}
+      </div>
+
+      <div class="also">
+        <h2 class="h3">{x.alsoTitle}</h2>
+        <ul>{alsoAvailable.map((name) => <li>{name}</li>)}</ul>
+      </div>
+
       <p class="note">{x.stockNote}</p>
-      <p class="more"><a class="btn" href={localePath(lang, '/contact')}>{inv.cta}</a></p>
+      <p class="more"><a class="btn" href={localePath(lang, '/contact')}>{t.inventory.cta}</a></p>
     </div>
   </section>
 </Base>
+
+<script>
+  function initFilter() {
+    const buttons = document.querySelectorAll<HTMLButtonElement>('.filter button');
+    const cards = document.querySelectorAll<HTMLElement>('#models .model');
+    if (!buttons.length) return;
+    const apply = (mode: string) => {
+      buttons.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.filter === mode)));
+      cards.forEach((card) => {
+        const rows = card.querySelectorAll<HTMLElement>('tbody tr');
+        let visibleRows = 0;
+        rows.forEach((row) => {
+          const show = mode === 'all' || row.dataset.aspiration === mode;
+          row.hidden = !show;
+          if (show) visibleRows += 1;
+        });
+        // Models without a grade table (grades on request) only appear under "All".
+        card.hidden = rows.length === 0 ? mode !== 'all' : visibleRows === 0;
+      });
+    };
+    buttons.forEach((b) => b.addEventListener('click', () => apply(b.dataset.filter ?? 'all')));
+  }
+  document.addEventListener('astro:page-load', initFilter);
+</script>

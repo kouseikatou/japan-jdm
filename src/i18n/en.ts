@@ -58,6 +58,8 @@ export const en = {
     contact: 'Contact',
     note: 'Vehicles are sold for export from Japan. Prices exclude ocean freight, marine insurance, import duties and local registration unless quoted otherwise.',
     phoneLabel: 'Tel',
+    privacy: 'Privacy policy',
+    skip: 'Skip to content',
   },
 
   home: {
@@ -303,6 +305,40 @@ export const en = {
       { title: 'Specific', text: 'We use chassis codes and honest condition notes, so you know what you are buying.' },
     ],
     cta: 'Request a vehicle',
+  },
+
+  privacy: {
+    title: 'Privacy policy',
+    metaTitle: 'Privacy policy | Japan JDM',
+    updated: 'Last updated: October 2026',
+    intro: 'This page explains what information japan-jdm.com collects, why, and how it is handled.',
+    sections: [
+      {
+        title: 'Information we collect',
+        text: 'When you send a request through the contact form we receive the details you enter: name, email address, company, country or state, the vehicle you need, your budget and your message. We also record the IP address of the request to prevent spam.',
+      },
+      {
+        title: 'How we use it',
+        text: 'We use this information only to reply to your request, to prepare quotes and to manage the sale. We do not sell your information and we do not use it for advertising.',
+      },
+      {
+        title: 'Where it is stored',
+        text: 'Requests are stored in our database on Cloudflare and are sent to us by email. Cloudflare also processes website traffic as our hosting and security provider.',
+      },
+      {
+        title: 'Cookies',
+        text: 'The site sets one functional cookie, called lang, that remembers the language you choose. It contains no personal information. We do not use advertising cookies.',
+      },
+      {
+        title: 'Analytics',
+        text: 'We use Cloudflare Web Analytics to count visits. It does not use cookies and does not track individual visitors across websites.',
+      },
+      {
+        title: 'Your requests',
+        text: 'To ask about, correct or delete the information you sent us, email info@japan-jdm.com.',
+      },
+    ],
+    contactTitle: 'Contact',
   },
 
   contact: {

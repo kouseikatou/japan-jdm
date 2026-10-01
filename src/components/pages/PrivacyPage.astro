@@ -1,0 +1,33 @@
+---
+import Base from '../../layouts/Base.astro';
+import { useTranslations } from '../../i18n';
+import type { Lang } from '../../i18n/config';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const p = t.privacy;
+---
+
+<Base lang={lang} title={p.metaTitle} description={p.intro}>
+  <section class="section page-top">
+    <div class="narrow">
+      <header class="head">
+        <h1 class="h2">{p.title}</h1>
+        <p class="lede">{p.intro}</p>
+        <p class="note">{p.updated}</p>
+      </header>
+      <div class="terms-list">
+        {p.sections.map((sec, i) => (
+          <article>
+            <span class="n">{String(i + 1).padStart(2, '0')}</span>
+            <div><h3>{sec.title}</h3><p>{sec.text}</p></div>
+          </article>
+        ))}
+      </div>
+      <p class="more">{p.contactTitle}: <a class="text-link" href={`mailto:${t.company.email}`}>{t.company.email}</a></p>
+    </div>
+  </section>
+</Base>

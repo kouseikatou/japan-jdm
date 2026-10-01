@@ -16,10 +16,7 @@
       "database_id": "01be46f6-4bd4-4938-a1c2-c4bae975c041"
     }
   ],
-  "send_email": [
-    { "name": "NOTIFY", "destination_address": "kouse1113sp@gmail.com" }
-  ],
-  "vars": { "NOTIFY_TO": "kouse1113sp@gmail.com" },
+  "send_email": [{ "name": "NOTIFY" }],
   "routes": [
     { "pattern": "japan-jdm.com", "custom_domain": true },
     { "pattern": "www.japan-jdm.com", "custom_domain": true }

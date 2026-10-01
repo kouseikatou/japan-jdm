@@ -1,16 +1,69 @@
 import { EmailMessage } from 'cloudflare:email';
 import { createMimeMessage, Mailbox } from 'mimetext';
 
+// ---------- helpers ----------
 const MAX = { name: 100, email: 200, company: 150, region: 100, interest: 100, message: 4000 };
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const SITE_LANGS = ['en', 'pt', 'zh', 'ko', 'ja'];
+const RATE_LIMIT = { perHour: 5, perDay: 20 };
 
 const json = (body, status = 200) =>
-  new Response(JSON.stringify(body), {
-    status,
-    headers: { 'content-type': 'application/json' },
-  });
+  new Response(JSON.stringify(body), { status, headers: { 'content-type': 'application/json' } });
 
 const clean = (value, max) => String(value ?? '').trim().slice(0, max);
+
+// ---------- security & caching headers ----------
+// 'unsafe-inline' is needed for Astro's small inline scripts and styles; every other source is self-hosted
+// except Google Fonts.
+const CSP = [
+  "default-src 'self'",
+  "script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com",
+  "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+  "font-src 'self' https://fonts.gstatic.com",
+  "img-src 'self' data:",
+  "media-src 'self'",
+  "connect-src 'self' https://cloudflareinsights.com",
+  "frame-ancestors 'none'",
+  "base-uri 'self'",
+  "form-action 'self'",
+  "object-src 'none'",
+  'upgrade-insecure-requests',
+].join('; ');
+
+const SECURITY_HEADERS = {
+  'Content-Security-Policy': CSP,
+  'Strict-Transport-Security': 'max-age=31536000; includeSubDomains',
+  'X-Content-Type-Options': 'nosniff',
+  'X-Frame-Options': 'DENY',
+  'Referrer-Policy': 'strict-origin-when-cross-origin',
+  'Permissions-Policy': 'camera=(), microphone=(), geolocation=(), payment=(), usb=()',
+  'Cross-Origin-Opener-Policy': 'same-origin',
+};
+
+function finalize(response, url) {
+  const res = new Response(response.body, response);
+  for (const [key, value] of Object.entries(SECURITY_HEADERS)) res.headers.set(key, value);
+  if (res.status === 200) {
+    if (url.pathname.startsWith('/_astro/')) res.headers.set('Cache-Control', 'public, max-age=31536000, immutable');
+    else if (url.pathname.startsWith('/img/')) res.headers.set('Cache-Control', 'public, max-age=604800');
+  }
+  return res;
+}
+
+// ---------- contact form ----------
+async function isRateLimited(env, ip) {
+  if (!ip) return false;
+  const row = await env.DB.prepare(
+    `SELECT
+       SUM(created_at > datetime('now', '-1 hour')) AS hour,
+       COUNT(*) AS day
+     FROM inquiries
+     WHERE ip = ? AND created_at > datetime('now', '-1 day')`,
+  )
+    .bind(ip)
+    .first();
+  return (row?.hour ?? 0) >= RATE_LIMIT.perHour || (row?.day ?? 0) >= RATE_LIMIT.perDay;
+}
 
 async function handleContact(request, env) {
   const form = await request.formData();
@@ -18,21 +71,23 @@ async function handleContact(request, env) {
   // Honeypot: bots fill the hidden field. Pretend success and store nothing.
   if (clean(form.get('website'), 200)) return json({ ok: true });
 
+  const ip = request.headers.get('cf-connecting-ip') ?? '';
+  if (await isRateLimited(env, ip)) return json({ ok: false, error: 'rate_limited' }, 429);
+
   const car = clean(form.get('car'), 200);
   const budget = clean(form.get('budget'), 60);
   const note = clean(form.get('message'), MAX.message);
+  const lang = SITE_LANGS.includes(clean(form.get('lang'), 5)) ? clean(form.get('lang'), 5) : 'en';
 
   // Keep the vehicle and budget with the message so nothing needs a schema change.
-  const message = [car && `Looking for: ${car}`, budget && `Budget: ${budget}`, note]
-    .filter(Boolean)
-    .join('\n');
+  const message = [car && `Looking for: ${car}`, budget && `Budget: ${budget}`, note].filter(Boolean).join('\n');
 
   const data = {
     name: clean(form.get('name'), MAX.name),
     email: clean(form.get('email'), MAX.email),
     company: clean(form.get('company'), MAX.company),
     region: clean(form.get('region'), MAX.region),
-    interest: clean(form.get('interest'), MAX.interest),
+    interest: `${clean(form.get('interest'), MAX.interest)} [${lang}]`,
     message,
   };
 
@@ -43,15 +98,7 @@ async function handleContact(request, env) {
   await env.DB.prepare(
     'INSERT INTO inquiries (name, email, company, region, interest, message, ip) VALUES (?, ?, ?, ?, ?, ?, ?)',
   )
-    .bind(
-      data.name,
-      data.email,
-      data.company,
-      data.region,
-      data.interest,
-      data.message,
-      request.headers.get('cf-connecting-ip') ?? '',
-    )
+    .bind(data.name, data.email, data.company, data.region, data.interest, data.message, ip)
     .run();
 
   // Notify by email. Failures must not break the form: the inquiry is already saved in D1.
@@ -65,7 +112,7 @@ async function handleContact(request, env) {
 }
 
 async function notify(env, data) {
-  if (!env.NOTIFY) return;
+  if (!env.NOTIFY || !env.NOTIFY_TO) return;
   const from = 'noreply@japan-jdm.com';
   const msg = createMimeMessage();
   msg.setSender({ name: 'Japan JDM Website', addr: from });
@@ -107,15 +154,15 @@ function readLangCookie(request) {
 
 const langCookie = (lang) => `lang=${lang}; Path=/; Max-Age=${ONE_YEAR}; SameSite=Lax; Secure`;
 
-function redirect(url, cookie) {
-  const headers = { Location: url, 'Cache-Control': 'no-store', Vary: 'Cookie' };
+function redirect(location, cookie) {
+  const headers = { Location: location, 'Cache-Control': 'no-store', Vary: 'Cookie' };
   if (cookie) headers['Set-Cookie'] = cookie;
   return new Response(null, { status: 302, headers });
 }
 
 const localized = (lang, url) => `/${lang}${url.pathname === '/' ? '' : url.pathname}${url.search}`;
 
-async function withCookie(response, cookie) {
+function withCookie(response, cookie) {
   const res = new Response(response.body, response);
   res.headers.append('Set-Cookie', cookie);
   return res;
@@ -147,21 +194,23 @@ async function handlePage(request, env, url) {
   return env.ASSETS.fetch(request);
 }
 
+async function route(request, env, url) {
+  if (url.pathname === '/api/contact') {
+    if (request.method !== 'POST') return json({ ok: false }, 405);
+    try {
+      return await handleContact(request, env);
+    } catch (err) {
+      console.error('contact error', err);
+      return json({ ok: false, error: 'server' }, 500);
+    }
+  }
+  if (request.method === 'GET' && isPage(url.pathname)) return handlePage(request, env, url);
+  return env.ASSETS.fetch(request);
+}
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
-
-    if (url.pathname === '/api/contact') {
-      if (request.method !== 'POST') return json({ ok: false }, 405);
-      try {
-        return await handleContact(request, env);
-      } catch (err) {
-        console.error('contact error', err);
-        return json({ ok: false, error: 'server' }, 500);
-      }
-    }
-
-    if (request.method === 'GET' && isPage(url.pathname)) return handlePage(request, env, url);
-    return env.ASSETS.fetch(request);
+    return finalize(await route(request, env, url), url);
   },
 };

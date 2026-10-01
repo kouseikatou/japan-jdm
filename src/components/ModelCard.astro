@@ -1,0 +1,51 @@
+---
+import { localePath, type Lang } from '../i18n/config';
+import { extra } from '../i18n/extra';
+import type { Model } from '../data/vehicles';
+
+interface Props {
+  lang: Lang;
+  model: Model;
+}
+const { lang, model } = Astro.props;
+const x = extra[lang];
+const label = `${model.name} (${model.chassis})`;
+const href = `${localePath(lang, '/contact')}?car=${encodeURIComponent(label)}`;
+const aspirationLabel = { twin: x.twin, turbo: x.turbo, na: x.na } as const;
+const hasTurbo = model.grades.some((g) => g.aspiration !== 'na');
+---
+
+<article class="model" data-reveal data-turbo={hasTurbo ? '1' : '0'} data-grades={model.grades.length}>
+  <header class="model-head">
+    <div>
+      <h3>{model.name}</h3>
+      <p class="chassis">{model.chassis}</p>
+    </div>
+    <dl class="model-meta">
+      <div><dt>{x.years}</dt><dd>{model.years}</dd></div>
+      <div><dt>{x.drive}</dt><dd>{model.drive}</dd></div>
+    </dl>
+  </header>
+
+  {model.grades.length > 0 ? (
+    <table class="grades">
+      <caption class="sr-only">{x.gradesTitle}</caption>
+      <thead>
+        <tr><th scope="col">{x.gradesTitle}</th><th scope="col">{x.engine}</th><th scope="col"></th></tr>
+      </thead>
+      <tbody>
+        {model.grades.map((g) => (
+          <tr data-aspiration={g.aspiration === 'na' ? 'na' : 'turbo'}>
+            <th scope="row">{g.name}</th>
+            <td>{g.engine}</td>
+            <td><span class={`asp asp-${g.aspiration}`}>{aspirationLabel[g.aspiration]}</span></td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  ) : (
+    <p class="no-grades">{x.noGrades}</p>
+  )}
+
+  <a class="btn small" href={href}>{x.request}</a>
+</article>
