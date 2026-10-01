@@ -1,6 +1,8 @@
 ---
 import Base from '../../layouts/Base.astro';
 import { useTranslations } from '../../i18n';
+import { extra } from '../../i18n/extra';
+import { profile } from '../../data/profile';
 import { localePath, type Lang } from '../../i18n/config';
 
 interface Props {
@@ -9,6 +11,7 @@ interface Props {
 const { lang } = Astro.props;
 const t = useTranslations(lang);
 const s = t.services;
+const x = extra[lang];
 const link = (path: string) => localePath(lang, path);
 
 const faqLd = {
@@ -72,6 +75,14 @@ const faqLd = {
         <dl class="table" data-reveal>
           {s.costs.items.map((c) => <div><dt>{c.title}</dt><dd>{c.text}</dd></div>)}
         </dl>
+        {profile.fees.length > 0 && (
+          <>
+            <h3 class="sub">{x.feesTitle}</h3>
+            <dl class="table compact" data-reveal>
+              {profile.fees.map((f) => <div><dt>{f.label}</dt><dd>{f.value}</dd></div>)}
+            </dl>
+          </>
+        )}
       </div>
       <div data-reveal style="--d:1">
         <p class="eyebrow">{s.auctionGrades.eyebrow}</p>

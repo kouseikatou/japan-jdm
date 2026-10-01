@@ -1,6 +1,8 @@
 ---
 import Base from '../../layouts/Base.astro';
 import { useTranslations } from '../../i18n';
+import { extra } from '../../i18n/extra';
+import { profile } from '../../data/profile';
 import { localePath, type Lang } from '../../i18n/config';
 
 interface Props {
@@ -9,6 +11,7 @@ interface Props {
 const { lang } = Astro.props;
 const t = useTranslations(lang);
 const s = t.shipping;
+const x = extra[lang];
 ---
 
 <Base lang={lang} title={t.meta.shipping.title} description={t.meta.shipping.description}>
@@ -29,6 +32,18 @@ const s = t.shipping;
       </div>
     </div>
   </section>
+
+  {profile.transit.length > 0 && (
+    <section class="section">
+      <div class="wrap narrow">
+        <header class="head" data-reveal><h2>{x.transitTitle}</h2></header>
+        <dl class="table" data-reveal>
+          {profile.transit.map((r) => <div><dt>{r.label}</dt><dd>{r.value}</dd></div>)}
+        </dl>
+        <p class="note">{x.transitNote}</p>
+      </div>
+    </section>
+  )}
 
   <section class="section tone">
     <div class="wrap split">

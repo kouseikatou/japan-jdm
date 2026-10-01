@@ -2,6 +2,7 @@
 import Base from '../../layouts/Base.astro';
 import { useTranslations } from '../../i18n';
 import { extra } from '../../i18n/extra';
+import { profile, isDummy } from '../../data/profile';
 import { localePath, type Lang } from '../../i18n/config';
 
 interface Props {
@@ -11,7 +12,13 @@ const { lang } = Astro.props;
 const t = useTranslations(lang);
 const a = t.about;
 const x = extra[lang];
-const rows = [a.rows[0], { label: x.representative, value: x.representativeName }, ...a.rows.slice(1)];
+const rows = [
+  a.rows[0],
+  { label: x.representative, value: x.representativeName },
+  ...(profile.licenseNumber ? [{ label: x.licence, value: [profile.licenseAuthority, profile.licenseNumber].filter(Boolean).join(' ') }] : []),
+  ...(profile.founded ? [{ label: x.founded, value: profile.founded }] : []),
+  ...a.rows.slice(1),
+];
 
 const orgLd = {
   '@context': 'https://schema.org',
@@ -59,6 +66,39 @@ const orgLd = {
       </div>
     </div>
   </section>
+
+  {profile.team.length > 0 && (
+    <section class="section">
+      <div class="wrap">
+        <header class="head" data-reveal><h2>{x.teamTitle}</h2></header>
+        <div class="people">
+          {profile.team.map((m, i) => (
+            <article class="person" data-reveal style={`--d:${i}`}>
+              <h3>{m.name}</h3>
+              <p class="role">{m.role}</p>
+              {m.bio && <p>{m.bio}</p>}
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  {profile.testimonials.length > 0 && (
+    <section class="section tone">
+      <div class="wrap">
+        <header class="head" data-reveal><h2>{x.testimonialsTitle}</h2></header>
+        <div class="quotes">
+          {profile.testimonials.map((q, i) => (
+            <blockquote data-reveal style={`--d:${i}`}>
+              <p>{q.text}</p>
+              <footer>{q.name}{q.detail ? ` · ${q.detail}` : ''}</footer>
+            </blockquote>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
 
   <script type="application/ld+json" set:html={JSON.stringify(orgLd)} />
 </Base>

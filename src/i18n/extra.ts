@@ -22,6 +22,14 @@ export interface ExtraCopy {
   representative: string;
   representativeName: string;
   workAlt: string;
+  licence: string;
+  founded: string;
+  teamTitle: string;
+  testimonialsTitle: string;
+  transitTitle: string;
+  transitNote: string;
+  feesTitle: string;
+  followUs: string;
 }
 
 const REP_EN = 'Kosei Kato (加藤 光成)';
@@ -48,6 +56,14 @@ export const extra: Record<Lang, ExtraCopy> = {
     representative: 'Representative',
     representativeName: REP_EN,
     workAlt: 'Export documents, car keys and an auction sheet on a desk',
+    licence: 'Dealer licence',
+    founded: 'Established',
+    teamTitle: 'Our team',
+    testimonialsTitle: 'Customer comments',
+    transitTitle: 'Typical transit times',
+    transitNote: 'Estimates only. The actual schedule is confirmed for each shipment.',
+    feesTitle: 'Fees',
+    followUs: 'Follow us',
   },
   pt: {
     stockTitle: 'Modelos que buscamos.',
@@ -70,6 +86,14 @@ export const extra: Record<Lang, ExtraCopy> = {
     representative: 'Representante',
     representativeName: REP_EN,
     workAlt: 'Documentos de exportação, chaves e uma ficha de leilão sobre a mesa',
+    licence: 'Licença de comerciante',
+    founded: 'Fundação',
+    teamTitle: 'Nossa equipe',
+    testimonialsTitle: 'Comentários de clientes',
+    transitTitle: 'Prazos de trânsito típicos',
+    transitNote: 'Estimativas. O cronograma real é confirmado a cada embarque.',
+    feesTitle: 'Taxas',
+    followUs: 'Siga-nos',
   },
   zh: {
     stockTitle: '常见采购车型。',
@@ -92,6 +116,14 @@ export const extra: Record<Lang, ExtraCopy> = {
     representative: '代表人',
     representativeName: REP_EN,
     workAlt: '桌上的出口文件、车钥匙和拍卖检查表',
+    licence: '古物商许可证',
+    founded: '成立',
+    teamTitle: '团队',
+    testimonialsTitle: '客户评价',
+    transitTitle: '常见运输时间',
+    transitNote: '仅为估计。实际时间按每次出运确认。',
+    feesTitle: '费用',
+    followUs: '关注我们',
   },
   ko: {
     stockTitle: '주요 취급 차종.',
@@ -114,6 +146,14 @@ export const extra: Record<Lang, ExtraCopy> = {
     representative: '대표자',
     representativeName: REP_EN,
     workAlt: '책상 위의 수출 서류, 차 키, 경매 평가표',
+    licence: '고물상 허가',
+    founded: '설립',
+    teamTitle: '팀',
+    testimonialsTitle: '고객 후기',
+    transitTitle: '일반적인 운송 기간',
+    transitNote: '추정치입니다. 실제 일정은 선적마다 확인해 드립니다.',
+    feesTitle: '수수료',
+    followUs: '팔로우',
   },
   ja: {
     stockTitle: '主な取扱車種。',
@@ -136,5 +176,13 @@ export const extra: Record<Lang, ExtraCopy> = {
     representative: '代表者',
     representativeName: '加藤 光成',
     workAlt: '机の上の輸出書類、車のキー、オークション評価書',
+    licence: '古物商許可',
+    founded: '設立',
+    teamTitle: 'スタッフ',
+    testimonialsTitle: 'お客様の声',
+    transitTitle: '輸送期間の目安',
+    transitNote: 'あくまで目安です。実際の日程は、出荷ごとにご案内いたします。',
+    feesTitle: '手数料',
+    followUs: 'SNS・動画',
   },
 };

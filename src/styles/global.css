@@ -379,3 +379,15 @@ html[data-lang='ja']
 .tile.static:hover { background: var(--panel); color: var(--text); }
 .tile.static strong { font: 500 1.15rem var(--serif); }
 .tile .muted { color: var(--muted); font-size: 0.92rem; }
+
+/* ---------- profile blocks ---------- */
+.people { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 1.5rem; }
+.person { background: var(--panel); border: 1px solid var(--line); border-radius: 2px; padding: 1.6rem; }
+.person .role { color: var(--accent-text); font-size: 0.82rem; letter-spacing: 0.08em; margin: 0.3rem 0 0.9rem; }
+.person p:last-child { color: var(--muted); font-size: 0.95rem; }
+.quotes { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); gap: 1.5rem; }
+.quotes blockquote { margin: 0; background: var(--panel); border: 1px solid var(--line); border-left: 2px solid var(--gold); border-radius: 2px; padding: 1.6rem 1.7rem; }
+.quotes blockquote p { font: 400 1.1rem / 1.6 var(--serif); }
+.quotes footer { margin-top: 1rem; color: var(--muted); font-size: 0.85rem; }
+h3.sub { margin: 2rem 0 0.4rem; font: 500 1.2rem var(--serif); }
+.dummy-flag { position: fixed; z-index: 99; left: 0; right: 0; top: 0; text-align: center; background: #b3261e; color: #fff; font: 600 0.78rem var(--sans); padding: 0.3rem; letter-spacing: 0.04em; }

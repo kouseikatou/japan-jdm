@@ -3,6 +3,7 @@ import '../styles/global.css';
 import { ClientRouter } from 'astro:transitions';
 import { languages, langCodes, defaultLang, localePath, stripLang, type Lang } from '../i18n/config';
 import { useTranslations } from '../i18n';
+import { profile, isDummy } from '../data/profile';
 
 interface Props {
   title: string;
@@ -12,6 +13,11 @@ interface Props {
 
 const { lang = defaultLang, title, description } = Astro.props;
 const t = useTranslations(lang);
+const social = [
+  ['WhatsApp', profile.contacts.whatsapp],
+  ['Instagram', profile.contacts.instagram],
+  ['YouTube', profile.contacts.youtube],
+].filter(([, url]) => url) as [string, string][];
 const metaDescription = description ?? t.meta.defaultDescription;
 
 const site = Astro.site ?? new URL('https://japan-jdm.com');
@@ -32,8 +38,8 @@ const cjk: Partial<Record<Lang, { serif: string; sans: string }>> = {
   zh: { serif: 'Noto+Serif+SC:wght@500;600', sans: 'Noto+Sans+SC:wght@400;500;700' },
   ko: { serif: 'Noto+Serif+KR:wght@500;600', sans: 'Noto+Sans+KR:wght@400;500;700' },
 };
-const extra = cjk[lang] ? `&family=${cjk[lang]!.serif}&family=${cjk[lang]!.sans}` : '';
-const fontHref = `https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,600&family=Inter:wght@400;500;600${extra}&display=swap`;
+const cjkFamilies = cjk[lang] ? `&family=${cjk[lang]!.serif}&family=${cjk[lang]!.sans}` : '';
+const fontHref = `https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,600&family=Inter:wght@400;500;600${cjkFamilies}&display=swap`;
 ---
 
 <!doctype html>
@@ -66,6 +72,7 @@ const fontHref = `https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@
     <link href={fontHref} rel="stylesheet" />
   </head>
   <body>
+    {isDummy && <div class="dummy-flag">PREVIEW: dummy data shown (not published)</div>}
     <a class="skip" href="#main">{t.footer.skip}</a>
     <header class="site-header">
       <div class="wrap">
@@ -119,6 +126,7 @@ const fontHref = `https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@
           <ul class="footer-links">
             <li><a href={`tel:${t.company.phone.replace(/-/g, '')}`}>{t.footer.phoneLabel} {t.company.phone}</a></li>
             <li><a href={`mailto:${t.company.email}`}>{t.company.email}</a></li>
+            {social.map(([name, url]) => <li><a href={url} rel="noopener" target="_blank">{name}</a></li>)}
           </ul>
         </div>
       </div>
