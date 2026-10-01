@@ -15,7 +15,6 @@ const x = extra[lang];
 const rows = [
   a.rows[0],
   { label: x.representative, value: x.representativeName },
-  ...(profile.licenseNumber ? [{ label: x.licence, value: [profile.licenseAuthority, profile.licenseNumber].filter(Boolean).join(' ') }] : []),
   ...(profile.founded ? [{ label: x.founded, value: profile.founded }] : []),
   ...a.rows.slice(1),
 ];

@@ -19,8 +19,6 @@ export interface Row {
   value: string;
 }
 export interface Profile {
-  licenseAuthority?: string; // e.g. the prefectural public safety commission named on your licence
-  licenseNumber?: string;
   founded?: string; // e.g. "2024"
   team: TeamMember[];
   testimonials: Testimonial[];
@@ -30,8 +28,6 @@ export interface Profile {
 }
 
 const real: Profile = {
-  licenseAuthority: undefined,
-  licenseNumber: undefined,
   founded: undefined,
   team: [],
   testimonials: [],
@@ -42,8 +38,6 @@ const real: Profile = {
 
 // Obvious placeholders, used only in the local preview.
 const dummy: Profile = {
-  licenseAuthority: 'DUMMY Prefectural Public Safety Commission',
-  licenseNumber: 'No. 000000000000',
   founded: '2000 (dummy)',
   team: [
     { name: 'DUMMY Name A', role: 'Representative', bio: 'Dummy profile text. Replace with a real introduction.' },

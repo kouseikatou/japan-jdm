@@ -22,7 +22,6 @@ export interface ExtraCopy {
   representative: string;
   representativeName: string;
   workAlt: string;
-  licence: string;
   founded: string;
   teamTitle: string;
   testimonialsTitle: string;
@@ -56,7 +55,6 @@ export const extra: Record<Lang, ExtraCopy> = {
     representative: 'Representative',
     representativeName: REP_EN,
     workAlt: 'Export documents, car keys and an auction sheet on a desk',
-    licence: 'Dealer licence',
     founded: 'Established',
     teamTitle: 'Our team',
     testimonialsTitle: 'Customer comments',
@@ -86,7 +84,6 @@ export const extra: Record<Lang, ExtraCopy> = {
     representative: 'Representante',
     representativeName: REP_EN,
     workAlt: 'Documentos de exportação, chaves e uma ficha de leilão sobre a mesa',
-    licence: 'Licença de comerciante',
     founded: 'Fundação',
     teamTitle: 'Nossa equipe',
     testimonialsTitle: 'Comentários de clientes',
@@ -116,7 +113,6 @@ export const extra: Record<Lang, ExtraCopy> = {
     representative: '代表人',
     representativeName: REP_EN,
     workAlt: '桌上的出口文件、车钥匙和拍卖检查表',
-    licence: '古物商许可证',
     founded: '成立',
     teamTitle: '团队',
     testimonialsTitle: '客户评价',
@@ -146,7 +142,6 @@ export const extra: Record<Lang, ExtraCopy> = {
     representative: '대표자',
     representativeName: REP_EN,
     workAlt: '책상 위의 수출 서류, 차 키, 경매 평가표',
-    licence: '고물상 허가',
     founded: '설립',
     teamTitle: '팀',
     testimonialsTitle: '고객 후기',
@@ -176,7 +171,6 @@ export const extra: Record<Lang, ExtraCopy> = {
     representative: '代表者',
     representativeName: '加藤 光成',
     workAlt: '机の上の輸出書類、車のキー、オークション評価書',
-    licence: '古物商許可',
     founded: '設立',
     teamTitle: 'スタッフ',
     testimonialsTitle: 'お客様の声',

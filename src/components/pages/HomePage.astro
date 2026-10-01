@@ -17,7 +17,6 @@ const x = extra[lang];
 const companyRows = [
   home.company.rows[0],
   { label: x.representative, value: x.representativeName },
-  ...(profile.licenseNumber ? [{ label: x.licence, value: [profile.licenseAuthority, profile.licenseNumber].filter(Boolean).join(' ') }] : []),
   ...home.company.rows.slice(1),
 ];
 const link = (path: string) => localePath(lang, path);
