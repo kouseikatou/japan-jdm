@@ -127,6 +127,16 @@ export const pt: PartialDict = {
         { label: 'Não incluído', value: 'Frete marítimo e seguro marítimo, salvo indicação na cotação. Impostos de importação e registro local.' },
       ],
     },
+    dealers: {
+      eyebrow: 'Para revendedores e importadores',
+      title: 'Compras estruturadas em torno do seu pedido.',
+      items: [
+        { title: 'Compra conforme a especificação', text: 'Envie uma lista de modelos, graus e um orçamento. Pesquisamos leilões e revendedores com base nela.' },
+        { title: 'Documentos no seu formato', text: 'Preparamos os documentos de exportação e podemos adaptá-los ao que o seu despachante aduaneiro precisa.' },
+        { title: 'Embarques combinados', text: 'Para vários veículos, podemos organizar o frete em conjunto, em RoRo ou em contêiner.' },
+      ],
+      cta: 'Discutir um pedido',
+    },
     port: {
       eyebrow: 'Porto de Nagoya',
       title: ['Do nosso escritório', 'ao seu pátio.'],
@@ -229,8 +239,59 @@ export const pt: PartialDict = {
         q: 'Vocês encontram um veículo que não está na lista de estoque?',
         a: 'Sim. A maior parte do nosso trabalho é a compra sob encomenda. Informe o modelo, a faixa de anos, o grau e o orçamento.',
       },
+      {
+        q: 'Como leio o grau na ficha de leilão?',
+        a: 'Cada veículo recebe um grau geral, como 4 ou 4.5, e um grau do interior, como A ou B. O grau R ou RA indica histórico de reparo por acidente. Traduzimos a ficha e a explicamos para o seu veículo.',
+      },
+      {
+        q: 'Posso importar o veículo para o meu país?',
+        a: 'As regras de importação variam por país e, às vezes, por estado. Verifique primeiro as regras do seu país. Informe o destino do veículo e confirmaremos o que for possível antes da compra.',
+      },
+      {
+        q: 'O frete tem seguro?',
+        a: 'O seguro marítimo pode ser incluído na cotação. Não está incluído, salvo indicação na cotação.',
+      },
     ],
     faqCta: 'Fazer uma pergunta',
+    inspect: {
+      eyebrow: 'Inspeção',
+      title: 'O que verificamos.',
+      intro: 'Nos veículos pré-selecionados, verificamos estes pontos e os registramos em fotos e vídeo.',
+      items: [
+        { title: 'Exterior e pintura', text: 'Folgas entre painéis, áreas repintadas, amassados, ferrugem e vidros.' },
+        { title: 'Rodas e freios', text: 'Estado das rodas, pneus, discos e desgaste visível dos freios.' },
+        { title: 'Interior', text: 'Bancos, painel, comandos, odor e desgaste em relação à quilometragem informada.' },
+        { title: 'Cofre do motor', text: 'Vazamentos, modificações, correias, mangueiras e estado geral.' },
+        { title: 'Parte inferior', text: 'Ferrugem, danos e reparos, verificados por baixo sempre que possível.' },
+      ],
+    },
+    costs: {
+      eyebrow: 'Custos',
+      title: 'O que a cotação inclui.',
+      intro: 'A cotação detalha cada custo, para que você veja o total antes de se comprometer.',
+      items: [
+        { title: 'Preço do veículo', text: 'O preço de compra no leilão ou no revendedor.' },
+        { title: 'Nossa tarifa de serviço', text: 'Informada por escrito na cotação, antes de você aprovar o veículo.' },
+        { title: 'Exportação e frete', text: 'Cancelamento do registro, documentos de exportação, manuseio no porto e frete, se as condições forem CFR.' },
+        { title: 'Não incluído', text: 'Impostos de importação, tributos e registro e vistoria no seu país. Seguro marítimo, salvo indicação na cotação.' },
+      ],
+    },
+    auctionGrades: {
+      eyebrow: 'Fichas de leilão',
+      title: 'Como ler o grau.',
+      intro: 'Os leilões japoneses atribuem um grau a cada veículo. A escala varia um pouco entre as casas de leilão, portanto use-a como referência. Traduzimos a ficha e a explicamos para o seu veículo.',
+      head: { grade: 'Grau', meaning: 'Significado' },
+      rows: [
+        { grade: 'S / 6', meaning: 'Quase novo, quilometragem muito baixa.' },
+        { grade: '5', meaning: 'Excelente, quase sem defeitos.' },
+        { grade: '4.5', meaning: 'Muito bom, pequenas marcas.' },
+        { grade: '4', meaning: 'Bom, desgaste normal para a idade.' },
+        { grade: '3.5 / 3', meaning: 'Regular a razoável, desgaste ou reparos visíveis.' },
+        { grade: '2 / 1', meaning: 'Ruim, desgaste ou danos significativos.' },
+        { grade: 'R / RA', meaning: 'Histórico de reparo por acidente (RA é um reparo leve).' },
+      ],
+      interior: 'O interior é avaliado separadamente, de A (melhor) em diante.',
+    },
   },
 
   shipping: {
@@ -249,14 +310,17 @@ export const pt: PartialDict = {
       {
         title: 'Frete',
         text: 'Os veículos são embarcados no porto de Nagoya, em RoRo ou contêiner. Confirmamos a rota e o cronograma previsto de cada embarque na cotação.',
-      },
-      {
+      },      {
         title: 'Documentos',
         text: 'Para cada veículo preparamos a Commercial Invoice, o Export Certificate e o Bill of Lading. Outros documentos podem ser incluídos sob solicitação, quando o destino os exigir.',
       },
       {
         title: 'Não incluído',
         text: 'Salvo indicação em contrário na cotação, o preço não inclui frete marítimo, seguro marítimo, impostos de importação, tributos nem registro e vistoria locais no seu país.',
+      },
+      {
+        title: 'RoRo ou contêiner',
+        text: 'No RoRo, o veículo é conduzido até o navio. É a opção econômica e as saídas são frequentes. O contêiner oferece mais proteção ao veículo e permite embarcar peças, ou vários veículos, juntos. Recomendamos uma das opções para o seu pedido.',
       },
     ],
     safetyTitle: 'Segurança no pagamento',

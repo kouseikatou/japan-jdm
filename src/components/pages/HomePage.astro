@@ -174,6 +174,23 @@ const faqLd = {
   </section>
 
   <section class="section tone">
+    <div class="wrap">
+      <header class="head" data-reveal>
+        <p class="eyebrow">{home.dealers.eyebrow}</p>
+        <h2>{home.dealers.title}</h2>
+      </header>
+      <div class="tiles tiles-3">
+        {home.dealers.items.map((d, i) => (
+          <div class="tile static" data-reveal style={`--d:${i}`}>
+            <span><strong>{d.title}</strong><br /><span class="muted">{d.text}</span></span>
+          </div>
+        ))}
+      </div>
+      <p class="more"><a class="btn" href={link('/contact')}>{home.dealers.cta}</a></p>
+    </div>
+  </section>
+
+  <section class="section">
     <div class="wrap split">
       <div data-reveal>
         <p class="eyebrow">{home.company.eyebrow}</p>

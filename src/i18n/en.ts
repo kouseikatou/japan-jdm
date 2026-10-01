@@ -141,6 +141,16 @@ export const en = {
         { label: 'Not included', value: 'Ocean freight and marine insurance unless quoted. Import duties and local registration.' },
       ],
     },
+    dealers: {
+      eyebrow: 'For dealers and importers',
+      title: 'Sourcing built around your order.',
+      items: [
+        { title: 'Sourcing to specification', text: 'Send a list of models, grades and a budget. We search auctions and dealers against it.' },
+        { title: 'Documents in your format', text: 'We prepare the export documents and can adapt them to what your customs broker needs.' },
+        { title: 'Combined shipments', text: 'For several vehicles we can arrange shipping together, by RoRo or in a container.' },
+      ],
+      cta: 'Discuss an order',
+    },
     port: {
       eyebrow: 'Nagoya port',
       title: ['From our office', 'to your yard.'],
@@ -244,8 +254,59 @@ export const en = {
         q: 'Can you find a vehicle that is not in your stock list?',
         a: 'Yes. Most of our work is sourcing to order. Tell us the model, year range, grade and budget.',
       },
+      {
+        q: 'How do I read the grade on an auction sheet?',
+        a: 'Each vehicle receives an overall grade, such as 4 or 4.5, and an interior grade, such as A or B. Grade R or RA means accident repair history. We translate the sheet and explain it for your vehicle.',
+      },
+      {
+        q: 'Can I import the vehicle into my country?',
+        a: 'Import rules differ by country and sometimes by state. Please check the rules for your country first. Tell us where the vehicle will go and we will confirm what we can before you buy.',
+      },
+      {
+        q: 'Is shipping insured?',
+        a: 'Marine insurance can be added to your quote. It is not included unless the quote says so.',
+      },
     ],
     faqCta: 'Ask a question',
+    inspect: {
+      eyebrow: 'Inspection',
+      title: 'What we check.',
+      intro: 'For the vehicles we shortlist, we check these areas and record them in photos and video.',
+      items: [
+        { title: 'Exterior and paint', text: 'Panel gaps, repainted areas, dents, rust and glass.' },
+        { title: 'Wheels and brakes', text: 'Wheel condition, tyres, discs and visible brake wear.' },
+        { title: 'Interior', text: 'Seats, dashboard, switches, smell, and wear compared with the stated mileage.' },
+        { title: 'Engine bay', text: 'Leaks, modifications, belts, hoses and general condition.' },
+        { title: 'Underbody', text: 'Rust, damage and repairs, checked from underneath where possible.' },
+      ],
+    },
+    costs: {
+      eyebrow: 'Costs',
+      title: 'What the quote includes.',
+      intro: 'Your quote itemises each cost, so you can see the total before you commit.',
+      items: [
+        { title: 'Vehicle price', text: 'The purchase price from the auction or dealer.' },
+        { title: 'Our service fee', text: 'Stated in the quote, in writing, before you approve the vehicle.' },
+        { title: 'Export and shipping', text: 'Deregistration, export paperwork, port handling, and freight if the terms are CFR.' },
+        { title: 'Not included', text: 'Import duties, taxes, and registration and inspection in your country. Marine insurance unless quoted.' },
+      ],
+    },
+    auctionGrades: {
+      eyebrow: 'Auction sheets',
+      title: 'How to read the grade.',
+      intro: 'Japanese auctions grade each vehicle. The scale varies a little between auction houses, so treat this as a guide. We translate the sheet and explain it for your vehicle.',
+      head: { grade: 'Grade', meaning: 'Meaning' },
+      rows: [
+        { grade: 'S / 6', meaning: 'Near new, very low mileage.' },
+        { grade: '5', meaning: 'Excellent, almost no flaws.' },
+        { grade: '4.5', meaning: 'Very good, minor marks.' },
+        { grade: '4', meaning: 'Good, normal wear for its age.' },
+        { grade: '3.5 / 3', meaning: 'Average to fair, visible wear or repairs.' },
+        { grade: '2 / 1', meaning: 'Poor, significant wear or damage.' },
+        { grade: 'R / RA', meaning: 'Accident repair history (RA is a minor repair).' },
+      ],
+      interior: 'The interior is graded separately, from A (best) downward.',
+    },
   },
 
   shipping: {
@@ -272,6 +333,10 @@ export const en = {
       {
         title: 'Not included',
         text: 'Unless the quote says otherwise, the price does not include ocean freight, marine insurance, import duties, taxes or local registration and inspection in your country.',
+      },
+      {
+        title: 'RoRo or container',
+        text: 'With RoRo the vehicle is driven onto the ship. It is the economical choice and sailings are frequent. A container gives the vehicle more protection and lets us ship parts, or several vehicles, together. We recommend one for your order.',
       },
     ],
     safetyTitle: 'Payment safety',

@@ -38,6 +38,56 @@ const faqLd = {
     </div>
   </section>
 
+  <section class="section">
+    <div class="wrap split">
+      <div>
+        <header class="head" data-reveal>
+          <p class="eyebrow">{s.inspect.eyebrow}</p>
+          <h2>{s.inspect.title}</h2>
+          <p class="lede">{s.inspect.intro}</p>
+        </header>
+        <ol class="numbered">
+          {s.inspect.items.map((item, i) => (
+            <li data-reveal style={`--d:${i}`}>
+              <span class="n">{String(i + 1).padStart(2, '0')}</span>
+              <div><h3>{item.title}</h3><p>{item.text}</p></div>
+            </li>
+          ))}
+        </ol>
+      </div>
+      <figure class="figure photo" data-reveal>
+        <img src="/img/inspection.jpg" alt="" width="1672" height="940" loading="lazy" />
+      </figure>
+    </div>
+  </section>
+
+  <section class="section tone">
+    <div class="wrap split">
+      <div>
+        <header class="head" data-reveal>
+          <p class="eyebrow">{s.costs.eyebrow}</p>
+          <h2>{s.costs.title}</h2>
+          <p class="lede">{s.costs.intro}</p>
+        </header>
+        <dl class="table" data-reveal>
+          {s.costs.items.map((c) => <div><dt>{c.title}</dt><dd>{c.text}</dd></div>)}
+        </dl>
+      </div>
+      <div data-reveal style="--d:1">
+        <p class="eyebrow">{s.auctionGrades.eyebrow}</p>
+        <h2>{s.auctionGrades.title}</h2>
+        <p class="lede">{s.auctionGrades.intro}</p>
+        <table class="grade-key">
+          <thead><tr><th scope="col">{s.auctionGrades.head.grade}</th><th scope="col">{s.auctionGrades.head.meaning}</th></tr></thead>
+          <tbody>
+            {s.auctionGrades.rows.map((r) => <tr><th scope="row">{r.grade}</th><td>{r.meaning}</td></tr>)}
+          </tbody>
+        </table>
+        <p class="note">{s.auctionGrades.interior}</p>
+      </div>
+    </div>
+  </section>
+
   <section class="section tone">
     <div class="wrap split">
       <div data-reveal>
@@ -48,7 +98,7 @@ const faqLd = {
         <p class="more"><a class="btn" href={link('/contact')}>{s.startQuote}</a></p>
       </div>
       <figure class="figure photo" data-reveal>
-        <img src="/img/inspection.jpg" alt="" width="1672" height="940" loading="lazy" />
+        <img src="/img/work-desk.jpg" alt="" width="1600" height="1000" loading="lazy" />
       </figure>
     </div>
   </section>
